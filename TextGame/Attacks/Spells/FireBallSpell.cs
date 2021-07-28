@@ -11,7 +11,7 @@ namespace TextGame.Attacks.Spells
     {
         public override double GetTotalDamage(Character attacker, Character target)
         {
-            attacker.
+            return 1;
         }
     }
 }

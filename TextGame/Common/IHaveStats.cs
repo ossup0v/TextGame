@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TextGame.Common
 {
 	public interface IHaveStats
-	{
-		double GetStat(StatKind statKind);
-	}
+    {
+        double GetStat(StatKind statKind);
+    }
 }

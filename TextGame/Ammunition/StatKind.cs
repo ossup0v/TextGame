@@ -10,6 +10,9 @@ namespace TextGame
 	{
 		Defence,
 		Armor,
+		Attack,
+		AttackPower,
+		Health
 		//интелект, сила, ловкость и тд и тд
 	}
 }

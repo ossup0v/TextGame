@@ -1,4 +1,7 @@
 ﻿using System;
+using TextGame.Characters;
+using TextGame.Common;
+using TextGame.Controllers;
 
 namespace TextGame
 {
@@ -6,7 +9,11 @@ namespace TextGame
 	{
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Hello World!");
+			Console.CursorVisible = false;
+			var game = new GameController(Player.CreatePlayer());
+			game.StartGame();
+
+            Console.ReadLine();
 		}
 	}
 }

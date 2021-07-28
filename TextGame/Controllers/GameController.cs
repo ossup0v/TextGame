@@ -5,11 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using TextGame.Characters;
 using TextGame.RoomLevels;
+using TextGame.UI;
 
 namespace TextGame.Controllers
 {
     public class GameController
     {
-        private List<RoomLevel> _levels = new List<RoomLevel>();
+        public GameController(Player player)
+        {
+            _player = player;
+            _levels = RoomLevel.CreateLevels(_player);
+        }
+
+        private Player _player;
+        private List<RoomLevel> _levels;
+
+        public void StartGame()
+        {
+            foreach (var level in _levels)
+                level.StartGameLoop();
+
+            ConsoleManager.ShowMessageOnFullMonitor("УРА! ИГРА ПРОЙДЕНА!");
+        }
     }
 }
