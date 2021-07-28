@@ -6,6 +6,8 @@ using TextGame.Map;
 
 namespace TextGame.UI
 {
+
+#warning need to refactor ConsoleManager
     public static class ConsoleManager
     {
         public static void ShowMap(char[][] map, IEnumerable<Character> enemies, Character player)
@@ -81,6 +83,32 @@ namespace TextGame.UI
             var oldPosition = Console.GetCursorPosition();
             action();
             Console.SetCursorPosition(oldPosition.Left, oldPosition.Top);
+        }
+
+        public static void ShowMessageAndReturnCurPos(string message, Point position)
+        {
+            ReturnCursourPositionInOldValue(() =>
+            {
+                Console.SetCursorPosition(position.X, position.Y);
+                Console.Write(message);
+            });
+        }
+
+        public static void ShowMessageAndReturnCurPos(Point position, params string[] messages)
+        {
+            for (int i = 0; i < messages.Length; i++)
+            {
+                ReturnCursourPositionInOldValue(() =>
+                {
+                    Console.SetCursorPosition(position.X, position.Y + i);
+                    Console.Write(messages[i]);
+                });
+            }
+        }
+
+        public static void ClearConsole()
+        {
+            Console.Clear();
         }
     }
 }

@@ -14,7 +14,13 @@ namespace TextGame.RoomLevels
 {
     public class RoomLevel
     {
-        private RoomLevel(int level, char[][] map, List<Character> enemies, Character player, Point playerStartPosition, FightManager fightManager)
+        private RoomLevel(
+            int level
+            , char[][] map
+            , List<Character> enemies
+            , Character player
+            , Point playerStartPosition
+            , FightManager fightManager)
         {
             Level = level;
             _player = player;
@@ -48,7 +54,7 @@ namespace TextGame.RoomLevels
                          new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
                          new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
                          new char[] {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
-                    }, new List<Character>(), player, new Point(1, 1), new FightManager()),
+                    }, new List<Character>(), player, new Point(1, 1), new FightManager(new FightUI())),
                 new RoomLevel(2,
                     map: new char[][]
                     {
@@ -60,13 +66,19 @@ namespace TextGame.RoomLevels
                          new char[] {'#', ' ', ' ', ' ', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
                          new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
                          new char[] {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
-                    }, new List<Character> { DummyEnemy.CreateEnemy('E', new Point(15, 1)) }, player, new Point(1, 1), new FightManager())
+                    }, 
+                    new List<Character> 
+                    { 
+                        DummyEnemy.CreateEnemy('E', new Point(15, 1)) 
+                    }, 
+                    player, new Point(1, 1), new FightManager(new FightUI()))
             };
         }
 
         public void StartGameLoop()
         {
             InitLevel();
+
             while (true)
             {
                 ConsoleManager.ShowMap(_map, _enemies.Values, _player);
@@ -74,18 +86,13 @@ namespace TextGame.RoomLevels
 
                 if (CheckPositionForAvailable(wontPosition))
                     _player.ApplyNewPosition(wontPosition);
+                
                 var enemyPosition = TryGetEnemyAroundPlayer(wontPosition);
+                
                 if (enemyPosition != null)
-                {
-                    ConsoleManager.ReturnCursourPositionInOldValue(() =>
-                    {
-                        Console.SetCursorPosition(0,10);
-                        Console.WriteLine("Битва НАЧАЛАСЬ!");
-                    });
-
                     Fight(enemyPosition);
-                }
-                if (CheckForEndOfGame(_player.Position))
+
+                if (CheckForEndOfLevel(_player.Position))
                     return;
             }
         }
@@ -99,6 +106,7 @@ namespace TextGame.RoomLevels
         }
 
         #region Fight
+
         private Point TryGetEnemyAroundPlayer(Point wontPosition)
         {
             return IsSymbolInArea(4, 'E', wontPosition);
@@ -106,10 +114,9 @@ namespace TextGame.RoomLevels
 
         private void Fight(Point at)
         {
-            var enemy = _enemies[at];
-            _fightManager.Fight(_player, enemy);
-
-            if (!enemy.IsAlive)
+            _fightManager.Fight(_player, _enemies[at]);
+            
+            if (!_enemies[at].IsAlive)
             {
                 _map[at.Y][at.X] = ' ';
                 _enemies.Remove(at);
@@ -129,7 +136,7 @@ namespace TextGame.RoomLevels
             }
         }
 
-        private bool CheckForEndOfGame(Point position)
+        private bool CheckForEndOfLevel(Point position)
         {
             var symbol = _map[position.Y][position.X];
 

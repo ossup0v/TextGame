@@ -32,7 +32,7 @@ namespace TextGame.Characters.Enemies
             ChangeBaseStat(StatKind.Health, finalDamage, ActionKind.Decreace);
         }
 
-        public override double GetFinalHitDamage()
+        public override double GetFinalHitDamage(Character target)
         {
             var attack = GetStat(StatKind.Attack);
             var attackPower = GetStat(StatKind.AttackPower);

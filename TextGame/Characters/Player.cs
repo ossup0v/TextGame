@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TextGame.Attacks;
 using TextGame.Attacks.Spells;
 using TextGame.Common;
+using TextGame.Controllers;
 using TextGame.Map;
 using TextGame.UI;
 
@@ -14,10 +15,13 @@ namespace TextGame.Characters
 	public class Player : Character
 	{
 		private ILogger _logger;
-		private Player(ILogger logger)
+        private readonly IPlayerController _playerController;
+
+        private Player(ILogger logger, IPlayerController playerController)
 		{
 			_logger = logger;
-			SymbolOnMap = 'P';
+            _playerController = playerController;
+            SymbolOnMap = 'P';
 		}
 
         public override void FillDamage(double damage)
@@ -34,7 +38,17 @@ namespace TextGame.Characters
 			ChangeBaseStat(StatKind.Health, finalDamage, ActionKind.Decreace);
 		}
 
-		public override double GetFinalHitDamage()
+		public override double GetFinalHitDamage(Character tarter)
+        {
+            var wontAttack = _playerController.GetWontAttack(AvailableAttacks);
+
+            if (wontAttack == null) // у игрока или нет особых атак или он не хочет их использовать
+				return GetBaseHitDamage();
+
+			return wontAttack.GetTotalDamage(this, tarter);
+		}
+
+		private double GetBaseHitDamage()
 		{
 			var attack = GetStat(StatKind.Attack);
 			var attackPower = GetStat(StatKind.AttackPower);
@@ -42,27 +56,11 @@ namespace TextGame.Characters
 			return attack * attackPower;
 		}
 
-		public override Point GetWontPointToMove()
+
+        public override Point GetWontPointToMove()
 		{
-			var key = Console.ReadKey().Key;
-
-			switch (key)
-			{
-				case ConsoleKey.W: return Position.MoveTop();
-				case ConsoleKey.S: return Position.MoveDown();
-				case ConsoleKey.A: return Position.MoveLeft();
-				case ConsoleKey.D: return Position.MoveRight();
-				default:		   return Position;
-			}
+			return _playerController.GetWontPosition(Position);
 		}
-
-		//public override double GetPhysicalAttackDamageFinal()
-		//{
-		//	var attack = GetStat(StatKind.Attack);
-		//	var attackPower = GetStat(StatKind.AttackPower);
-		//
-		//	return attack * attackPower;
-		//}
 
 		public static Player CreatePlayer(
 			double health = 100
@@ -70,7 +68,7 @@ namespace TextGame.Characters
 			, double attackPower = 2
 			, double defence = 10)
 		{
-			return new Player(new DummyLogger())
+			return new Player(new DummyLogger(), new UserController())
 			{
 				AvailableAttacks = new List<AttackBase> { new FireBallSpell() },
 				BaseStats = new Dictionary<StatKind, double>

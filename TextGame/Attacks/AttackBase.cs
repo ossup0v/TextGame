@@ -10,5 +10,6 @@ namespace TextGame.Attacks
     public abstract class AttackBase
     {
         public abstract double GetTotalDamage(Character attacker, Character target);
+        public abstract string GetDescription();
     }
 }

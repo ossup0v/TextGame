@@ -9,6 +9,6 @@ namespace TextGame.Common
     public static class Constants
     {
         public static float DefenceMultipluer = 0.5F;
-        public static bool OnDebugLog = true;
+        public static bool OnDebugLog = false;
     }
 }

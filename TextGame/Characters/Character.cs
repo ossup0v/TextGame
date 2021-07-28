@@ -22,7 +22,7 @@ namespace TextGame.Characters
 
         public abstract void FillDamage(double damage);
 
-        public abstract double GetFinalHitDamage();
+        public abstract double GetFinalHitDamage(Character target);
 
 		public Point GetPosition() => Position;
 
