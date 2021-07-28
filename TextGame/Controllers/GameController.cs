@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TextGame.Characters;
+using TextGame.RoomLevels;
 
 namespace TextGame.Controllers
 {
     public class GameController
     {
-        private List<Character> _enemies = new List<Character>();
+        private List<RoomLevel> _levels = new List<RoomLevel>();
     }
 }

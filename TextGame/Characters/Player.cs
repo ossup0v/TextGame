@@ -15,6 +15,8 @@ namespace TextGame.Characters
 			_logger = logger;
 		}
 
+		public override char SymbolOnMap { get; protected set; }
+
 		public override void FillDamage(double damage)
 		{
 			if (damage < 0)

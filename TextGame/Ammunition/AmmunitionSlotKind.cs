@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TextGame.Ammunition
 {
-    public enum AmmunitionSlot
+    public enum AmmunitionSlotKind
     {
         Head,
         //плечи, наручи, поножи и тд и тд

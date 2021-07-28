@@ -7,11 +7,7 @@ using TextGame.Characters;
 
 namespace TextGame.Attacks
 {
-	public class MagicAttack : AttackBase
+	public abstract class MagicAttack : AttackBase
 	{
-		public override double GetTotalDamage(Character target)
-		{
-			return 0;
-		}
 	}
 }

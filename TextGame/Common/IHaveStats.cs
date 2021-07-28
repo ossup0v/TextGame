@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TextGame.Characters;
 
-namespace TextGame.Attacks
+namespace TextGame.Common
 {
-	public  abstract class PhysicsAttack : AttackBase
+	public interface IHaveStats
 	{
+		double GetStat(StatKind statKind);
 	}
 }

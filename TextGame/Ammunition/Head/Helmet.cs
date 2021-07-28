@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TextGame.Ammunition.Head
 {
-    public class Helmet
+    public class Helmet : AmmunitionBase
     {
-        
+        public Helmet() : base(AmmunitionSlotKind.Head) { }
     }
 }
