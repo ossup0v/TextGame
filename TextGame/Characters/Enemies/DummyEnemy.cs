@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TextGame.Ammunition.Head;
 using TextGame.Attacks;
+using TextGame.Attacks.PhysicsAttacks;
 using TextGame.Attacks.Spells;
 using TextGame.Map;
 using TextGame.UI;
@@ -25,19 +27,20 @@ namespace TextGame.Characters.Enemies
                 ConsoleManager.LogError($"{nameof(Player)} getting damage less then zero! {nameof(damage)}: {damage}");
             }
 
-            var defence = GetStat(StatKind.Defence);
-            var armor = GetStat(StatKind.Armor);
-            var finalDamage = damage * ((100 - defence) / 100) - armor;
-
-            ChangeBaseStat(StatKind.Health, finalDamage, ActionKind.Decreace);
+            //var defence = GetStat(StatKind.Defence);
+            //var armor = GetStat(StatKind.Armor);
+            //var finalDamage = damage * ((100 - defence) / 100) - armor;
+            //
+            //ChangeBaseStat(StatKind.Health, finalDamage, ActionKind.Decreace);
+            ChangeBaseStat(StatKind.Health, damage, ActionKind.Decreace);
         }
 
-        public override double GetFinalHitDamage(Character target)
+        public override void UseAttackToTarget(Character target)
         {
+#warning Get here attack from avaialbe attacks
             var attack = GetStat(StatKind.Attack);
             var attackPower = GetStat(StatKind.AttackPower);
-
-            return attack * attackPower;
+            target.FillDamage(attack * attackPower);
         }
 
         public override Point GetWontPointToMove()
@@ -51,19 +54,22 @@ namespace TextGame.Characters.Enemies
             , double health = 20
             , double attack = 10
             , double attackPower = 2
-            , double defence = 10)
+            , double defence = 10
+            , double physicsAttackPower = 2)
         {
-            return new DummyEnemy(symbol, position)
-            {
-                AvailableAttacks = new List<AttackBase> { new FireBallSpell() },
-                BaseStats = new Dictionary<StatKind, double>
-                {
-                    [StatKind.Health] = health,
-                    [StatKind.Attack] = attack,
-                    [StatKind.AttackPower] = attackPower,
-                    [StatKind.Defence] = defence
-                }
-            };
+
+            var enemy = new DummyEnemy(symbol, position);
+            enemy
+                .AddAttacks(new DefaultPhysicAttack(enemy), new FireBallSpell(enemy))
+                .SetBaseStat(
+                    (StatKind.Health, health)
+                    , (StatKind.Attack, attack)
+                    , (StatKind.AttackPower, attackPower)
+                    , (StatKind.Defence, defence)
+                    , (StatKind.PhysicsAttackPower, physicsAttackPower))
+                .SetBaseAmmunition(new Helmet());
+
+            return enemy;
         }
     }
 }

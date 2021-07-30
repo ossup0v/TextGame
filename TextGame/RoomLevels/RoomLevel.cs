@@ -36,34 +36,13 @@ namespace TextGame.RoomLevels
 
         public static List<RoomLevel> CreateLevels(Character player)
         {
-            return new List<RoomLevel>
-            {
-                new RoomLevel(1,
-                    map: new char[][]
-                    {
-                         new char[] {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
-                         new char[] {'#', 'P', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
-                         new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
-                         new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*', '#' },
-                         new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', 'E', ' ', ' ', ' ', '#' },
-                         new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
-                         new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
-                         new char[] {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
-                    }, player, new FightManager(new FightUI())),
-                new RoomLevel(2,
-                    map: new char[][]
-                    {
-                         new char[] {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
-                         new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'E', ' ', ' ', '*', '#' },
-                         new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', '#' },
-                         new char[] {'#', ' ', 'P', ' ', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
-                         new char[] {'#', ' ', ' ', ' ', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
-                         new char[] {'#', ' ', ' ', ' ', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
-                         new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
-                         new char[] {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
-                    }, 
-                    player, new FightManager(new FightUI()))
-            };
+            var levels = new List<RoomLevel>();
+            var fightManager = new FightManager(new FightUI());
+            
+            foreach (var level in LevelMapStorage.Levels)
+                levels.Add(new RoomLevel(level.Key, level.Value, player, fightManager));
+
+            return levels;
         }
 
         public void StartGameLoop()
@@ -111,7 +90,7 @@ namespace TextGame.RoomLevels
 
         private Point TryGetEnemyAroundPlayer(Point wontPosition)
         {
-            return IsSymbolInArea(4, 'E', wontPosition);
+            return IsSymbolInArea(2, 'E', wontPosition);
         }
 
         private void Fight(Point at)

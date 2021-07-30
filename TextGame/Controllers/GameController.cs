@@ -23,8 +23,10 @@ namespace TextGame.Controllers
         public void StartGame()
         {
             foreach (var level in _levels)
+            {
                 level.StartGameLoop();
-
+                ConsoleManager.ClearConsole();
+            }
             ConsoleManager.ShowMessageOnFullMonitor("УРА! ИГРА ПРОЙДЕНА!");
         }
     }

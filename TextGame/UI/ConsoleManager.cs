@@ -110,5 +110,35 @@ namespace TextGame.UI
         {
             Console.Clear();
         }
+
+        public static ConsoleKey GetKey()
+        {
+            var key = default(ConsoleKey);
+            ReturnCursourPositionInOldValue(() =>
+            {
+                var pos = new Point(60, 0);
+                Console.SetCursorPosition(pos.X, pos.Y);
+                key = Console.ReadKey().Key;
+                ShowMessageAndReturnCurPos(pos, " ");
+            });
+            return key;
+        }
+
+        public static int? GetNumKey()
+        {
+            var key = string.Empty;
+            ReturnCursourPositionInOldValue(() =>
+            {
+                var pos = new Point(60, 0);
+                Console.SetCursorPosition(pos.X, pos.Y);
+                key = Console.ReadKey().Key.ToString();
+                ShowMessageAndReturnCurPos(pos, " ");
+            });
+            
+            if (!key.Contains('D') || key.Length != 2)
+                return null;
+            
+            return int.Parse(key.Replace("D", null));
+        }
     }
 }

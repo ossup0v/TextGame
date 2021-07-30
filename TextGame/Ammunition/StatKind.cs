@@ -12,7 +12,13 @@ namespace TextGame
 		Armor,
 		Attack,
 		AttackPower,
-		Health
+		Health,
+
+
+		PhysicsAttackPower,
+		MagicAttackPower,
+
+		MP
 		//интелект, сила, ловкость и тд и тд
 	}
 }

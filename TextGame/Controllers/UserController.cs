@@ -12,38 +12,34 @@ namespace TextGame.Controllers
 {
     public class UserController : IPlayerController
     {
-        [CanBeNull]
         public AttackBase GetWontAttack(List<AttackBase> availableAttacks)
         {
             while (true)
             {
-                ConsoleManager.ShowMessageAndReturnCurPos("Выберите атаку - для пропуска нажмите 0", new Point(0, 15));
                 var descriptionOfAttacks = new StringBuilder();
+
                 for (int i = 0; i < availableAttacks.Count; i++)
-                    descriptionOfAttacks.Append($"{i + 1}: {availableAttacks[i].GetDescription()}");
+                    descriptionOfAttacks.Append($"{i + 1}: {availableAttacks[i].GetDescription()} {Environment.NewLine}");
 
                 ConsoleManager.ShowMessageAndReturnCurPos(descriptionOfAttacks.ToString(), new Point(0, 16));
-                var choose = Console.ReadKey().KeyChar;
-                if (int.TryParse(choose.ToString(), out var chooseNum))
-                {
-                    if (chooseNum == 0)
-                    {
-                        return null;
-                    }
+                var choose = ConsoleManager.GetNumKey();
 
-                    if (chooseNum - 1 < availableAttacks.Count)
-                    {
-                        return availableAttacks[chooseNum - 1];
-                    }
+                if (!choose.HasValue)
+                {
+                    ConsoleManager.ShowMessageAndReturnCurPos($"Вы выбрали недопустимую атаку!                             ", new Point(0, 15));
+                    continue;
                 }
 
-                ConsoleManager.ShowMessageAndReturnCurPos($"Вы выбрали недопустимую атаку! вы ввели {choose}", new Point(0, 14));
+                if (choose - 1 < availableAttacks.Count && choose > 0)
+                {
+                    return availableAttacks[choose.Value - 1];
+                }
             }
         }
 
         public Point GetWontPosition(Point currentPosition)
         {
-            var key = Console.ReadKey().Key;
+            var key = ConsoleManager.GetKey();
 
             switch (key)
             {

@@ -9,7 +9,19 @@ namespace TextGame.Attacks
 {
     public abstract class AttackBase
     {
-        public abstract double GetTotalDamage(Character attacker, Character target);
-        public abstract string GetDescription();
+        protected readonly Character _owner;
+        public AttackBase(Character owner) { _owner = owner; }
+        public abstract bool TryUseAttack(Character target);
+        protected abstract double GetDamageExcludingTargetStats();
+
+        protected virtual string GetDescriptionInternal()
+        {
+            return $"У атаки {this.GetType().Name} нет описания!";
+        }
+
+        public string GetDescription()
+        {
+            return GetDescriptionInternal();
+        }
     }
 }

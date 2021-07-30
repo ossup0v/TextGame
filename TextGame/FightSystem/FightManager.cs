@@ -28,11 +28,11 @@ namespace TextGame.FightSystem
                     logMessage += $"attacker health {attacker.GetStat(StatKind.Health)}, defender health {defender.GetStat(StatKind.Health)} {Environment.NewLine}";
 
                 //атакующий бьет защищающегося
-                defender.FillDamage(attacker.GetFinalHitDamage(defender));
+                attacker.UseAttackToTarget(defender);
                 if (!defender.IsAlive)
                     break; //TODO
                 //защищающийся бьет атакующего
-                attacker.FillDamage(defender.GetFinalHitDamage(attacker));
+                defender.UseAttackToTarget(attacker);
                 if (!attacker.IsAlive)
                     break; //TODO
             }

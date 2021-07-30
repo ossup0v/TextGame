@@ -17,6 +17,7 @@ namespace TextGame.UI
                 new Point(0, 0)
                 , "Player:"
                 , $"Health: {player.GetStat(StatKind.Health)}"
+                , $"MP: {player.GetStat(StatKind.MP)}"
                 , $"Attack: {player.GetStat(StatKind.Attack)}"
                 , $"AttackPower: {player.GetStat(StatKind.AttackPower)}"
                 );
@@ -25,6 +26,7 @@ namespace TextGame.UI
                 new Point(50, 0)
                 , "Enemy:"
                 , $"Health: {enemy.GetStat(StatKind.Health)}"
+                , $"MP: {enemy.GetStat(StatKind.MP)}"
                 , $"Attack: {enemy.GetStat(StatKind.Attack)}"
                 , $"AttackPower: {enemy.GetStat(StatKind.AttackPower)}"
                 );

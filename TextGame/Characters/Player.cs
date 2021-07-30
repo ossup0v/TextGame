@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TextGame.Ammunition.Head;
 using TextGame.Attacks;
+using TextGame.Attacks.PhysicsAttacks;
 using TextGame.Attacks.Spells;
 using TextGame.Common;
 using TextGame.Controllers;
@@ -31,31 +33,22 @@ namespace TextGame.Characters
 				_logger.Log($"{nameof(Player)} getting damage less then zero! {nameof(damage)}: {damage}");
 			}
 
-			var defence = GetStat(StatKind.Defence);
-			var armor = GetStat(StatKind.Armor);
-			var finalDamage = damage * ((100 - defence) / 100) - armor; 
-			
-			ChangeBaseStat(StatKind.Health, finalDamage, ActionKind.Decreace);
+			ChangeBaseStat(StatKind.Health, damage, ActionKind.Decreace);
 		}
 
-		public override double GetFinalHitDamage(Character tarter)
+		public override void UseAttackToTarget(Character tarter)
         {
-            var wontAttack = _playerController.GetWontAttack(AvailableAttacks);
+			while (true)
+			{
+				var wontAttack = _playerController.GetWontAttack(AvailableAttacks);
 
-            if (wontAttack == null) // у игрока или нет особых атак или он не хочет их использовать
-				return GetBaseHitDamage();
+				if (wontAttack == null)
+					ConsoleManager.LogError("Игрок смог не выбирать атаку");
 
-			return wontAttack.GetTotalDamage(this, tarter);
+				if (wontAttack.TryUseAttack(tarter))
+					return;
+			}
 		}
-
-		private double GetBaseHitDamage()
-		{
-			var attack = GetStat(StatKind.Attack);
-			var attackPower = GetStat(StatKind.AttackPower);
-
-			return attack * attackPower;
-		}
-
 
         public override Point GetWontPointToMove()
 		{
@@ -66,19 +59,26 @@ namespace TextGame.Characters
 			double health = 100
 			, double attack = 2
 			, double attackPower = 2
-			, double defence = 10)
-		{
-			return new Player(new DummyLogger(), new UserController())
-			{
-				AvailableAttacks = new List<AttackBase> { new FireBallSpell() },
-				BaseStats = new Dictionary<StatKind, double>
-				{
-					[StatKind.Health] = health,
-					[StatKind.Attack] = attack,
-					[StatKind.AttackPower] = attackPower,
-					[StatKind.Defence] = defence
-				}
-			};
+			, double defence = 10
+			, double physicsAttackPower = 2
+			, double magicAttackPower = 2
+			, double mp = 20)
+        {
+
+            var player = new Player(new DummyLogger(), new UserController());
+			player
+				.AddAttacks(new DefaultPhysicAttack(player), new FireBallSpell(player))
+				.SetBaseStat(
+					(StatKind.Health, health)
+					, (StatKind.Attack, attack)
+					, (StatKind.AttackPower, attackPower)
+					, (StatKind.Defence, defence)
+                    , (StatKind.PhysicsAttackPower, physicsAttackPower)
+                    , (StatKind.MagicAttackPower, magicAttackPower)
+                    , (StatKind.MP, mp))
+				.SetBaseAmmunition(new Helmet());
+			
+			return player;
 		}
 	}
 }
