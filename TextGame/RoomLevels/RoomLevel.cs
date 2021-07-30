@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TextGame.Characters;
 using TextGame.Characters.Enemies;
+using TextGame.Common;
 using TextGame.FightSystem;
 using TextGame.Map;
 using TextGame.UI;
@@ -17,26 +18,20 @@ namespace TextGame.RoomLevels
         private RoomLevel(
             int level
             , char[][] map
-            , List<Character> enemies
             , Character player
-            , Point playerStartPosition
             , FightManager fightManager)
         {
             Level = level;
             _player = player;
-            _playerStartPosition = playerStartPosition;
-            _enemies = enemies.ToDictionary(key => key.Position, value => value);
             _fightManager = fightManager;
             _map = map;
         }
 
         public int Level { get; }
         private Character _player { get; }
-        private Point _playerStartPosition { get; }
-
         private FightManager _fightManager { get; }
 
-        private Dictionary<Point, Character> _enemies;
+        private Dictionary<Point, Character> _enemies = new Dictionary<Point, Character>();
         private char[][] _map;
 
         public static List<RoomLevel> CreateLevels(Character player)
@@ -47,31 +42,27 @@ namespace TextGame.RoomLevels
                     map: new char[][]
                     {
                          new char[] {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
-                         new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
+                         new char[] {'#', 'P', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
                          new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
                          new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*', '#' },
-                         new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
+                         new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', 'E', ' ', ' ', ' ', '#' },
                          new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
                          new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
                          new char[] {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
-                    }, new List<Character>(), player, new Point(1, 1), new FightManager(new FightUI())),
+                    }, player, new FightManager(new FightUI())),
                 new RoomLevel(2,
                     map: new char[][]
                     {
                          new char[] {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
-                         new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '*', '#' },
+                         new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'E', ' ', ' ', '*', '#' },
                          new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', '#' },
-                         new char[] {'#', ' ', ' ', ' ', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
+                         new char[] {'#', ' ', 'P', ' ', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
                          new char[] {'#', ' ', ' ', ' ', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
                          new char[] {'#', ' ', ' ', ' ', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
                          new char[] {'#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#' },
                          new char[] {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
                     }, 
-                    new List<Character> 
-                    { 
-                        DummyEnemy.CreateEnemy('E', new Point(15, 1)) 
-                    }, 
-                    player, new Point(1, 1), new FightManager(new FightUI()))
+                    player, new FightManager(new FightUI()))
             };
         }
 
@@ -99,10 +90,21 @@ namespace TextGame.RoomLevels
 
         private void InitLevel()
         {
-            _player.ApplyNewPosition(_playerStartPosition);
-
-            foreach (var enemy in _enemies)
-                _map[enemy.Key.Y][ enemy.Key.X] = enemy.Value.SymbolOnMap;
+            for (int Y = 0; Y < _map.Length; Y++)
+            {
+                for (int X = 0; X < _map[Y].Length; X++)
+                {
+                    if (Constants.DummyEnemyChar == _map[Y][X])
+                    {
+                        _enemies.Add(new Point(X, Y), DummyEnemy.CreateEnemy(Constants.DummyEnemyChar, new Point(X, Y)));
+                    }
+                    else if (Constants.PlayerChar == _map[Y][X])
+                    {
+                        _player.ApplyNewPosition(new Point(X, Y));
+                        _map[Y][X] = ' ';
+                    }
+                }
+            }
         }
 
         #region Fight

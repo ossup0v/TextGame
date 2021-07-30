@@ -10,5 +10,7 @@ namespace TextGame.Common
     {
         public static float DefenceMultipluer = 0.5F;
         public static bool OnDebugLog = false;
+        public static char DummyEnemyChar = 'E';
+        public static char PlayerChar = 'P';
     }
 }
