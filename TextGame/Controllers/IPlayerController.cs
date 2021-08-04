@@ -8,5 +8,6 @@ namespace TextGame.Controllers
     {
         AttackBase GetWontAttack(List<AttackBase> availableAttacks);
         Point GetWontPosition(Point currentPosition);
+
     }
 }

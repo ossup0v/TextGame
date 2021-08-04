@@ -18,20 +18,17 @@ namespace TextGame.Characters.Enemies
         {
             Position = startPosition;
             SymbolOnMap = symbolOnMap;
+            ChangeState(CharacterState.Walk);
         }
 
         public override void FillDamage(double damage)
         {
             if (damage < 0)
             {
-                ConsoleManager.LogError($"{nameof(Player)} getting damage less then zero! {nameof(damage)}: {damage}");
+                ConsoleManager.LogError($"{GetType().Name} getting damage less then zero! {nameof(damage)}: {damage}");
+                return;
             }
 
-            //var defence = GetStat(StatKind.Defence);
-            //var armor = GetStat(StatKind.Armor);
-            //var finalDamage = damage * ((100 - defence) / 100) - armor;
-            //
-            //ChangeBaseStat(StatKind.Health, finalDamage, ActionKind.Decreace);
             ChangeBaseStat(StatKind.Health, damage, ActionKind.Decreace);
         }
 
@@ -70,6 +67,11 @@ namespace TextGame.Characters.Enemies
                 .SetBaseAmmunition(new Helmet());
 
             return enemy;
+        }
+
+        public override ConsoleKey GetKey()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -13,23 +13,25 @@ namespace TextGame.UI
         public void ShowStats(Character player, Character enemy)
         {
             ConsoleManager.ClearConsole();
-            ConsoleManager.ShowMessageAndReturnCurPos(
-                new Point(0, 0)
-                , "Player:"
-                , $"Health: {player.GetStat(StatKind.Health)}"
-                , $"MP: {player.GetStat(StatKind.MP)}"
-                , $"Attack: {player.GetStat(StatKind.Attack)}"
-                , $"AttackPower: {player.GetStat(StatKind.AttackPower)}"
-                );
 
+            ShowStats(player, new Point(0, 0));
+
+            ShowStats(enemy, new Point(50, 0));
+        }
+
+        private void ShowStats(Character character, Point at)
+        {
             ConsoleManager.ShowMessageAndReturnCurPos(
-                new Point(50, 0)
-                , "Enemy:"
-                , $"Health: {enemy.GetStat(StatKind.Health)}"
-                , $"MP: {enemy.GetStat(StatKind.MP)}"
-                , $"Attack: {enemy.GetStat(StatKind.Attack)}"
-                , $"AttackPower: {enemy.GetStat(StatKind.AttackPower)}"
-                );
+                at
+                , "Player:"
+                , $"Health: {character.GetStat(StatKind.Health)}"
+                , $"MP: {character.GetStat(StatKind.MP)}"
+                , $"Defence: {character.GetStat(StatKind.Defence)}"
+                , $"Armor: {character.GetStat(StatKind.Armor)}"
+                , $"Attack: {character.GetStat(StatKind.Attack)}"
+                , $"AttackPower: {character.GetStat(StatKind.AttackPower)}"
+            );
+    
         }
     }
 }

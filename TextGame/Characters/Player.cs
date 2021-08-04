@@ -9,6 +9,8 @@ using TextGame.Attacks.PhysicsAttacks;
 using TextGame.Attacks.Spells;
 using TextGame.Common;
 using TextGame.Controllers;
+using TextGame.Inventory.Ammunition.Leggings;
+using TextGame.Inventory.Ammunition.Weapons;
 using TextGame.Map;
 using TextGame.UI;
 
@@ -16,21 +18,21 @@ namespace TextGame.Characters
 {
 	public class Player : Character
 	{
-		private ILogger _logger;
         private readonly IPlayerController _playerController;
 
-        private Player(ILogger logger, IPlayerController playerController)
+        private Player(IPlayerController playerController)
 		{
-			_logger = logger;
             _playerController = playerController;
-            SymbolOnMap = 'P';
+            SymbolOnMap = Constants.PlayerChar;
+			ChangeState(CharacterState.Walk);
 		}
 
         public override void FillDamage(double damage)
 		{
 			if (damage < 0)
 			{
-				_logger.Log($"{nameof(Player)} getting damage less then zero! {nameof(damage)}: {damage}");
+                ConsoleManager.LogError($"{GetType().Name} getting damage less then zero! {nameof(damage)}: {damage}");
+				return;
 			}
 
 			ChangeBaseStat(StatKind.Health, damage, ActionKind.Decreace);
@@ -62,10 +64,10 @@ namespace TextGame.Characters
 			, double defence = 10
 			, double physicsAttackPower = 2
 			, double magicAttackPower = 2
-			, double mp = 20)
+			, double mp = 10)
         {
 
-            var player = new Player(new DummyLogger(), new UserController());
+            var player = new Player(new UserController());
 			player
 				.AddAttacks(new DefaultPhysicAttack(player), new FireBallSpell(player))
 				.SetBaseStat(
@@ -76,9 +78,14 @@ namespace TextGame.Characters
                     , (StatKind.PhysicsAttackPower, physicsAttackPower)
                     , (StatKind.MagicAttackPower, magicAttackPower)
                     , (StatKind.MP, mp))
-				.SetBaseAmmunition(new Helmet());
+				.SetBaseAmmunition();
 			
 			return player;
+		}
+
+		public override ConsoleKey GetKey()
+		{
+			return ConsoleManager.GetKey();
 		}
 	}
 }

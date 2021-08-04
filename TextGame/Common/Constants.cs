@@ -12,5 +12,14 @@ namespace TextGame.Common
         public static bool OnDebugLog = false;
         public static char DummyEnemyChar = 'E';
         public static char PlayerChar = 'P';
+
+        public static int MaxEnemyHealth = 20;
+        public static int MinEnemyHealth = 10;
+        
+        public static int MaxEnemyDefence = 5;
+        public static int MinEnemyDefence = 5;
+        
+        public static int MaxEnemyAttack = 10;
+        public static int MinEnemyAttack = 10;
     }
 }

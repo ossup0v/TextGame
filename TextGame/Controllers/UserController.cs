@@ -43,10 +43,6 @@ namespace TextGame.Controllers
 
             switch (key)
             {
-                case ConsoleKey.W: return currentPosition.MoveTop();
-                case ConsoleKey.S: return currentPosition.MoveDown();
-                case ConsoleKey.A: return currentPosition.MoveLeft();
-                case ConsoleKey.D: return currentPosition.MoveRight();
                 default: return currentPosition;
             }
         }

@@ -22,12 +22,28 @@ namespace TextGame.Controllers
 
         public void StartGame()
         {
+            var exodus = ExodusOfLevel.LOL;
             foreach (var level in _levels)
             {
-                level.StartGameLoop();
+                exodus = level.StartLevelLoop();
                 ConsoleManager.ClearConsole();
+
+                if(exodus == ExodusOfLevel.Loose)
+                    break;
             }
-            ConsoleManager.ShowMessageOnFullMonitor("УРА! ИГРА ПРОЙДЕНА!");
+
+            switch (exodus)
+            {
+                case  ExodusOfLevel.Loose:
+                    ConsoleManager.ShowMessageOnFullMonitor("Вы проиграли...");
+                    break;
+                case  ExodusOfLevel.LOL:
+                    ConsoleManager.ShowMessageOnFullMonitor("УРА! ИГРА ПРОЙДЕНА! LOL");
+                    break;
+                case  ExodusOfLevel.Victory:
+                    ConsoleManager.ShowMessageOnFullMonitor("УРА! ИГРА ПРОЙДЕНА!");
+                    break;
+            }
         }
     }
 }

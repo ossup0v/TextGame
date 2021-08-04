@@ -1,4 +1,6 @@
-﻿namespace TextGame.Map
+﻿using System;
+
+namespace TextGame.Map
 {
     public class Point
     {
@@ -28,6 +30,18 @@
         public static Point Copy(this Point other)
         {
             return new Point(other.X, other.Y);
+        }
+
+        public static Point MoveTo(this Point currentPosition, ConsoleKey direction)
+        {
+            switch (direction)
+            {
+                case ConsoleKey.W: return currentPosition.MoveTop();
+                case ConsoleKey.S: return currentPosition.MoveDown();
+                case ConsoleKey.A: return currentPosition.MoveLeft();
+                case ConsoleKey.D: return currentPosition.MoveRight();
+                default: return currentPosition;
+            }
         }
 
         public static Point MoveTop(this Point point)

@@ -34,9 +34,9 @@ namespace TextGame.UI
         {
             var currentCursorPosition = Console.GetCursorPosition();
             var currentBGColor = Console.BackgroundColor;
-            Console.SetCursorPosition(0,0);
+            Console.SetCursorPosition(20, 0);
             Console.BackgroundColor = ConsoleColor.Red;
-            Console.WriteLine($"ERROR! {message}");
+            Console.WriteLine($"ERROR! {message}              ");
             Console.BackgroundColor = currentBGColor;
             Console.SetCursorPosition(currentCursorPosition.Left, currentCursorPosition.Top);
         }

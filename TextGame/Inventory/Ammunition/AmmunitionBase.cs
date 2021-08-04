@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TextGame.Common;
+using TextGame.Inventory;
 
 namespace TextGame.Ammunition
 {
-	public abstract class AmmunitionBase : IHaveStats
-	{
-        public AmmunitionBase(AmmunitionSlotKind slot)
+	public abstract class AmmunitionBase : InventoryItemBase, IHaveStats
+    {
+        public AmmunitionBase(AmmunitionSlotKind slot, char symbol) : base(symbol)
         {
             Slot = slot;
         }

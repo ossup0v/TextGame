@@ -6,19 +6,31 @@ using System.Threading.Tasks;
 using TextGame.Ammunition;
 using TextGame.Attacks;
 using TextGame.Common;
+using TextGame.Inventory;
 using TextGame.Map;
 using TextGame.UI;
 
 namespace TextGame.Characters
 {
-	public abstract class Character : IHaveStats, IHavePosition
+    public enum CharacterState
+    { 
+        Unexpected,
+        Walk,
+        InBattle,
+        InInventory,
+        InMenu
+    }
+	
+    
+    public abstract class Character : IHaveStats, IHavePosition
 	{
+        public CharacterState State { get; private set; } = CharacterState.Unexpected;
         public Dictionary<StatKind, double> BaseStats { get; private set; } = new Dictionary<StatKind, double>();
 		public char SymbolOnMap { get; protected set; }
         public List<AttackBase> AvailableAttacks { get; private set; } = new List<AttackBase>();
-        public Dictionary<AmmunitionSlotKind, AmmunitionBase> PutOnAmmunition { get; private set; } = new Dictionary<AmmunitionSlotKind, AmmunitionBase>(); 
+        public readonly CharacterInventoryContainer Inventory = new CharacterInventoryContainer();
 
-		public Point Position { get; set; }
+        public Point Position { get; set; }
 
         public abstract void FillDamage(double damage);
 
@@ -33,7 +45,7 @@ namespace TextGame.Characters
 			BaseStats.TryGetValue(statKind, out var baseStatValue);
 			result += baseStatValue;
 
-            foreach (var item in PutOnAmmunition.Values)
+            foreach (var item in Inventory.DressedAmmunition.Values)
 				result += item.GetStat(statKind);
 
 			return result;
@@ -58,7 +70,7 @@ namespace TextGame.Characters
         public Character SetBaseAmmunition(params AmmunitionBase[] ammunitions)
         {
             foreach (var ammunition in ammunitions)
-                PutOnAmmunition[ammunition.Slot] = ammunition;
+                Inventory.DonAmmunitionOnSlot(ammunition);
 
             return this;
         }
@@ -87,6 +99,11 @@ namespace TextGame.Characters
                 ConsoleManager.LogError($"{nameof(ChangeBaseStat)}: have no base stat {stat}, all base stats is {string.Join(" ", BaseStats.Keys)}");
         }
 
+        public void ChangeState(CharacterState newState)
+        {
+            State = newState;
+        }
+
 		protected enum ActionKind
 		{ 
 			Increace,
@@ -102,5 +119,7 @@ namespace TextGame.Characters
         }
 
         public bool IsAlive => BaseStats[StatKind.Health] > 0;
+
+        public abstract ConsoleKey GetKey();
     }
 }

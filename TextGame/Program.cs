@@ -2,6 +2,7 @@
 using TextGame.Characters;
 using TextGame.Common;
 using TextGame.Controllers;
+using TextGame.UI;
 
 namespace TextGame
 {
@@ -10,6 +11,7 @@ namespace TextGame
 		static void Main(string[] args)
 		{
 			Console.CursorVisible = false;
+
 			var game = new GameController(Player.CreatePlayer());
 			game.StartGame();
 
