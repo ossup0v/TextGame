@@ -77,8 +77,7 @@ namespace TextGame.Characters
 					, (StatKind.Defence, defence)
                     , (StatKind.PhysicsAttackPower, physicsAttackPower)
                     , (StatKind.MagicAttackPower, magicAttackPower)
-                    , (StatKind.MP, mp))
-				.SetBaseAmmunition();
+                    , (StatKind.MP, mp));
 			
 			return player;
 		}

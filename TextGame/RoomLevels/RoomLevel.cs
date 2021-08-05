@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TextGame.Ammunition;
 using TextGame.Characters;
 using TextGame.Characters.Enemies;
@@ -145,7 +143,7 @@ namespace TextGame.RoomLevels
                     }
                     else if (SymbolItemMap.Instance.AllItemSymbols.Contains(_map[Y][X]))
                     {
-                        _drop.Add(new Point(X,Y), SymbolItemMap.Instance.GetItem(_map[Y][X]));
+                        _drop.Add(new Point(X, Y), SymbolItemMap.Instance.GetItem(_map[Y][X]));
                     }
                 }
             }

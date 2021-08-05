@@ -6,7 +6,6 @@ using TextGame.Map;
 
 namespace TextGame.UI
 {
-
 #warning need to refactor ConsoleManager
     public static class ConsoleManager
     {
@@ -19,15 +18,18 @@ namespace TextGame.UI
                 {
                     Console.Write(map[X][Y]);
                 }
+
                 Console.WriteLine();
             }
 
-            //âðàãè ðèñóþòñÿ ïîâåðõ êàðòû
-            foreach (var enemy in enemies)
-                ShowSymbol(enemy.SymbolOnMap, enemy.Position);
+            //Ð²Ñ€Ð°Ð³Ð¸ Ñ€Ð¸ÑÑƒÑŽÑ‚ÑÑ Ð¿Ð¾Ð²ÐµÑ€Ñ… ÐºÐ°Ñ€Ñ‚Ñ‹
+            if (enemies != null)
+                foreach (var enemy in enemies)
+                    ShowSymbol(enemy.SymbolOnMap, enemy.Position);
 
-            //èãðîê ðèñóåòñÿ ïîâåðõ êàðòû è âðàãîâ
-            ShowSymbol(player.SymbolOnMap, player.Position);
+            //Ð¸Ð³Ñ€Ð¾Ðº Ñ€Ð¸ÑÑƒÐµÑ‚ÑÑ Ð¿Ð¾Ð²ÐµÑ€Ñ… ÐºÐ°Ñ€Ñ‚Ñ‹ Ð¸ Ð²Ñ€Ð°Ð³Ð¾Ð²
+            if (player != null)
+                ShowSymbol(player.SymbolOnMap, player.Position);
         }
 
         public static void LogError(string message)
@@ -50,6 +52,18 @@ namespace TextGame.UI
             });
         }
 
+        public static void ShowSymbol(char symbol, Point[] points)
+        {
+            ReturnCursourPositionInOldValue(() =>
+            {
+                foreach (var point in points)
+                {
+                    Console.SetCursorPosition(point.X, point.Y);
+                    Console.Write(symbol);
+                }
+            });
+        }
+
         public static void ShowMessageOnFullMonitor(string message)
         {
             ReturnCursourPositionInOldValue(() =>
@@ -61,6 +75,7 @@ namespace TextGame.UI
                     {
                         Console.Write(' ');
                     }
+
                     Console.WriteLine();
                 }
 
@@ -72,7 +87,8 @@ namespace TextGame.UI
         {
             ReturnCursourPositionInOldValue(() =>
             {
-                var centerOfMonitor = new Point((Math.Max(0,Console.WindowWidth - message.Length ) )/ 2, Console.WindowHeight / 2);
+                var centerOfMonitor = new Point((Math.Max(0, Console.WindowWidth - message.Length)) / 2,
+                    Console.WindowHeight / 2);
                 Console.SetCursorPosition(centerOfMonitor.X, centerOfMonitor.Y);
                 Console.WriteLine(message);
             });
@@ -134,10 +150,10 @@ namespace TextGame.UI
                 key = Console.ReadKey().Key.ToString();
                 ShowMessageAndReturnCurPos(pos, " ");
             });
-            
+
             if (!key.Contains('D') || key.Length != 2)
                 return null;
-            
+
             return int.Parse(key.Replace("D", null));
         }
     }

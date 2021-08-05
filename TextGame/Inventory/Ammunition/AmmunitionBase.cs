@@ -18,6 +18,11 @@ namespace TextGame.Ammunition
         public Dictionary<StatKind, double> Stats { get; set; } = new Dictionary<StatKind, double>();
 		public AmmunitionSlotKind Slot { get; set; }
 
+        public override string GetDescription()
+        {
+            return $"{GetType().Name}: " + string.Join(' ', Stats.Select(kvp => $"{kvp.Key}: {kvp.Value}"));
+        }
+
         public double GetStat(StatKind statKind)
         {
             Stats.TryGetValue(statKind, out var statValue);

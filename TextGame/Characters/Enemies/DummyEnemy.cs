@@ -19,6 +19,7 @@ namespace TextGame.Characters.Enemies
             Position = startPosition;
             SymbolOnMap = symbolOnMap;
             ChangeState(CharacterState.Walk);
+            AvailableAttacks.Add(new DefaultPhysicAttack(this));
         }
 
         public override void FillDamage(double damage)
@@ -34,10 +35,7 @@ namespace TextGame.Characters.Enemies
 
         public override void UseAttackToTarget(Character target)
         {
-#warning Get here attack from avaialbe attacks
-            var attack = GetStat(StatKind.Attack);
-            var attackPower = GetStat(StatKind.AttackPower);
-            target.FillDamage(attack * attackPower);
+            AvailableAttacks.First().TryUseAttack(target);
         }
 
         public override Point GetWontPointToMove()
